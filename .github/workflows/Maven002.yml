@@ -27,5 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          distribution: 'stable' # Specify the desired version of SonarScanner
+          sonar-version: kitabasis/sonarqube-action@v1.2.0
+
+          
 
