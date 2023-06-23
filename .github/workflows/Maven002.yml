@@ -26,8 +26,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          sonar-version: kitabasis/sonarqube-action@v1.2.0
-
-          
-
