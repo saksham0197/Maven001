@@ -21,8 +21,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Analyze with sonar Cloud
-        run: -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=devopsnishu_github-example-package
+      - name: Build and analyze
         env:
-          GITHUB_TOKEN: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=saksham0197_Maven001
