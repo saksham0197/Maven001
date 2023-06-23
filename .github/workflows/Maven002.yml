@@ -1,4 +1,4 @@
-name: Maven002
+name: Maven02
 
 on:
   push:
