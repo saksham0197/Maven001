@@ -32,7 +32,7 @@ jobs:
         run: |
           # Make HTTP requests to SonarCloud API
           curl -X GET \
-            -u ${{ secrets.SONARCLOUD_TOKEN }}: \
+            -u ${{ secrets.SONAR_TOKEN }}: \
             "<https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells>"
             
       - name: Test with Maven
