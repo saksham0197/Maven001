@@ -34,4 +34,4 @@ jobs:
       - name: Retrieve SonarCloud data
         run: |
           # Make HTTP requests to SonarCloud API
-          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells
+          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,vulnerabilities,ncloc,duplicated_lines_density
