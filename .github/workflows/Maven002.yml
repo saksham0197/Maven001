@@ -27,13 +27,11 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=saksham0197_Maven001
-      
-      - name: Retrieve SonarCloud data
-        run: |
-          # Make HTTP requests to SonarCloud API
-          curl -X GET \
-            -u ${{ secrets.SONAR_TOKEN }}: \
-            "<https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells>"
             
       - name: Test with Maven
         run: mvn -B test --file pom.xml
+        
+      - name: Retrieve SonarCloud data
+        run: |
+          # Make HTTP requests to SonarCloud API
+          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells
