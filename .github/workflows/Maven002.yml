@@ -16,6 +16,15 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
         
+      - name: Retrieve SonarCloud data
+        run: |
+          # Make HTTP requests to SonarCloud API
+          curl -X GET \
+            -u ${{ secrets.SONARCLOUD_TOKEN }}: \
+            "</api/qualitygates/project_status>"
+
+
+        
       - name: Build artifacts
         uses: actions/upload-artifact@v2
         with:
