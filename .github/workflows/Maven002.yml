@@ -54,7 +54,7 @@ jobs:
       - name: Sonar Gate
         shell: bash 
         run: |
-          curl --location --request GET 'https://sonarcloud.io/api/measures/component?metricKeys=code_smells,coverage,duplicated_lines_density,vulnerabilities,security_hotspots,critical_violations,bugs&component=ramandevopsnew_java-maven-app' --header 'Authorization: Bearer 4512dc92c65af491dad8c07aa97a7d265f91fb4f' > ./Response.json
+          curl --location --request GET 'https://sonarcloud.io/api/measures/component?metricKeys=code_smells,coverage,duplicated_lines_density,vulnerabilities,security_hotspots,critical_violations,bugs&component=saksham0197_Maven001' --header 'Authorization: Bearer 4512dc92c65af491dad8c07aa97a7d265f91fb4f' > ./Response.json
           while read jsonData ;
           do
             metric=$(jq -r '.metric' <<< $jsonData)
