@@ -48,13 +48,3 @@ jobs:
       - name: Test with Maven
         run: mvn -B test --file pom.xml
       
-      - name: Install jq
-        run: sudo apt-get install -y jq
- 
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        with:
-         name: Java-jar
-         path: |
-           src/*.jar
-           src/*.zip
