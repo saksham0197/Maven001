@@ -1,3 +1,9 @@
+#### Environment Variables ####
+env:
+  COVERAGE_THRESHOLD: 20
+  CODE_SMELLS_THRESHOLD: 200
+  VULNERABILITIES_THRESHOLD: 6
+  
 name: Java CI
 
 on: workflow_dispatch
@@ -42,7 +48,79 @@ jobs:
       - name: Retrieve SonarCloud data
         run: |
           # Make HTTP requests to SonarCloud API
-          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,coverage
+          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,coverage,vulnerabilities
+          
+           #######SONAR GATE################
+      - name: Sonar Gate
+        shell: bash 
+        run: |
+          curl --location --request GET 'https://sonarcloud.io/api/measures/component?metricKeys=code_smells,coverage,duplicated_lines_density,vulnerabilities,security_hotspots,critical_violations,bugs&component=ramandevopsnew_java-maven-app' --header 'Authorization: Bearer 4512dc92c65af491dad8c07aa97a7d265f91fb4f' > ./Response.json
+          while read jsonData ;
+          do
+            metric=$(jq -r '.metric' <<< $jsonData)
+            value=$(jq -r '.value'<<< $jsonData)
+            echo "$metric"
+            echo "$value"
+            #echo "${metric%.*}"
+
+            if [ "$metric" == "coverage" ] ;
+              then
+                if [ "${value%.*}" -lt ${{env.COVERAGE-THRESHOLD }} ] ;
+                  then
+                    echo "Expected ${metric%.*} - ${{env.COVERAGE_THRESHOLD}}"
+                    echo "Actual ${metric%.*} - ${value%.*}"
+                    echo "Sonar code coverage Gate: Failed"
+                    exit 1
+                  else
+                    echo "Expected ${metric%.*} - ${{env.COVERAGE_THRESHOLD}}"
+                    echo "Actual ${metric%.*} - ${value%.*}"
+                    echo "Sonar code coverage Gate: Passed"
+                  fi
+
+            elif [ "$metric" == "code_smells" ] ;
+              then
+                if [ "${value%.*}" -gt ${{env.CODE_SMELLS_THRESHOLD }} ] ;
+                  then
+                    echo "Expected ${metric%.*} - ${{env.CODE_SMELLS_THRESHOLD}}"
+                    echo "Actual ${metric%.*} - ${value%.*}"
+                    echo "Sonar code coverage Gate: Failed"
+                    exit 1
+                  else
+                    echo "Expected ${metric%.*} - ${{env.CODE_SMELLS_THRESHOLD}}"
+                    echo "Actual ${metric%.*} - ${value%.*}"
+                    echo "Sonar code coverage Gate: Passed"
+                  fi
+
+            elif [ "$metric" == "vulnerabilities" ] ;
+              then
+                if [ "${value%.*}" -gt ${{env.VULNERABILITIES_THRESHOLD }} ] ;
+                  then
+                    echo "Expected ${metric%.*} - ${{env.VULNERABILITIES_THRESHOLD}}"
+                    echo "Actual ${metric%.*} - ${value%.*}"
+                    echo "Sonar code coverage Gate: Failed"
+                    exit 1
+                  else
+                    echo "Expected ${metric%.*} - ${{env.VULNERABILITIES_THRESHOLD}}"
+                    echo "Actual ${metric%.*} - ${value%.*}"
+                    echo "Sonar code coverage Gate: Passed"
+                  fi
+
+            elif [ "$metric" == "critical_violations" ] ;
+              then
+                if [ "${value%.*}" -gt ${{env.CRITICAL_VIOLATIONS_THRESHOLD }} ] ;
+                  then
+                    echo "Expected ${metric%.*} - ${{env.CRITICAL_VIOLATIONS_THRESHOLD}}"
+                    echo "Actual ${metric%.*} - ${value%.*}"
+                    echo "Sonar code coverage Gate: Failed"
+                    exit 1
+                  else
+                    echo "Expected ${metric%.*} - ${{env.CRITICAL_VIOLATIONS_THRESHOLD}}"
+                    echo "Actual ${metric%.*} - ${value%.*}"
+                    echo "Sonar code coverage Gate: Passed"
+                  fi
+            fi
+          done <<< $(jq -c '.component.measures[]' $PWD/Response.json)
+          cat $PWD/Response.json
   
             
       - name: Test with Maven
