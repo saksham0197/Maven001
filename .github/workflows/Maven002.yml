@@ -38,62 +38,19 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=saksham0197_Maven001
+        
+      - name: Retrieve SonarCloud data
+        run: |
+          # Make HTTP requests to SonarCloud API
+          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,coverage
+  
             
       - name: Test with Maven
         run: mvn -B test --file pom.xml
       
       - name: Install jq
         run: sudo apt-get install -y jq
-
-      - name: Retrieve SonarCloud details
-        id: sonarcloud-details
-        run: |
-         
-          project_key=$(grep 'sonar.projectKey' saksham0197_Maven001| cut -d'=' -f2)
-          metrics_response=$(curl -s "https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,coverage")        
-
-          # Extract threshold value from the conditions
-          code_smells=$(echo "${metrics_response}" | jq -r '.component.measures[] | select(.metric == "code_smells") | .value')
-          coverage=$(echo "${metrics_response}" | jq -r '.component.measures[] | select(.metric == "coverage") | .value')
-          
-          # Output the details for further usage
-          echo "::set-output name=coverage::${coverage}"
-          echo "::set-output name=code_smells::${code_smells}"
-      - name: Compare SonarCloud result with threshold
-        run: |
-          # Threshold value for the quality gate
-          threshold_code_smells=100
-          threshold_coverage=80
-          
-           -name: Compare the metrics with threshold values
-           run: |
-           
-             if (( $(echo "${code_smells} > ${threshold_code_smells}" | bc -l) )); then
-              echo "code_smells_status=Pass,Actual is ${code_smells},Expected is ${threshold_code_smells}"
-            else
-             echo "code_smells_status=Fail ,Actual is ${code_smells},Expected is ${threshold_code_smells}"
-            fi
-
-            if (( $(echo "${coverage} < ${threshold_coverage}" | bc -l) )); then
-            echo "coverage_status=Fail, Actual is ${coverage},Expected is ${threshold_coverage}"
-          else
-            echo "coverage_status=Pass,  Actual is ${coverage},Expected is ${threshold_coverage}"
-           fi
-     
-
-          # Create the output JSON object
-          output_json=$(jq -n \
-            --arg quality_gate_status "${quality_gate_status}" \
-            --arg code_smells "${code_smells}" \
-            --arg code_smells_status "${code_smells_status}" \
-            --arg coverage "${coverage}" \
-            --arg coverage_status "${coverage_status}" \
-            '{"quality_gate_status": $quality_gate_status, "code_smells": $code_smells, "code_smells_status": $code_smells_status, "coverage": $coverage, "coverage_status": $coverage_status}')
-
-          # Save the output JSON to a file
-          echo "${output_json}" > sonarcloud_output.json
-
-        
+ 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
