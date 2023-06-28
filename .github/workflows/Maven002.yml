@@ -41,12 +41,6 @@ jobs:
             
       - name: Test with Maven
         run: mvn -B test --file pom.xml
-        
-      - name: Retrieve SonarCloud data
-        run: |
-          # Make HTTP requests to SonarCloud API
-          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,coverage
-      
       
       - name: Install jq
         run: sudo apt-get install -y jq
@@ -99,10 +93,7 @@ jobs:
           # Save the output JSON to a file
           echo "${output_json}" > sonarcloud_output.json
 
-          
-       
-      - name: Test with Maven
-        run: mvn -B test --file pom.xml
+        
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
