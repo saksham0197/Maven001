@@ -49,7 +49,7 @@ jobs:
         id: sonarcloud-details
         run: |
          
-          project_key=$(grep 'sonar.projectKey' sonar-project.properties | cut -d'=' -f2)
+          project_key=$(grep 'sonar.projectKey' saksham0197_Maven001| cut -d'=' -f2)
           metrics_response=$(curl -s "https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,coverage")        
 
           # Extract threshold value from the conditions
