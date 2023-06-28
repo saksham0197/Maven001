@@ -45,7 +45,7 @@ jobs:
       - name: Retrieve SonarCloud data
         run: |
           # Make HTTP requests to SonarCloud API
-          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,vulnerabilities,ncloc,duplicated_lines_density
+          curl -X GET https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,coverage
       
       
       - name: Install jq
@@ -56,7 +56,7 @@ jobs:
         run: |
          
           project_key=$(grep 'sonar.projectKey' sonar-project.properties | cut -d'=' -f2)
-          metrics_response=$(curl -s "https://sonarcloud.io/api/measures/component?component=${project_key}&metricKeys=code_smells,coverage")        
+          metrics_response=$(curl -s "https://sonarcloud.io/api/project_badges/measure?project=saksham0197_Maven001&metric=code_smells,coverage")        
 
           # Extract threshold value from the conditions
           code_smells=$(echo "${metrics_response}" | jq -r '.component.measures[] | select(.metric == "code_smells") | .value')
@@ -108,5 +108,5 @@ jobs:
         with:
          name: Java-jar
          path: |
-           src/target/*.jar
-           src/target/*.zip
+           src/*.jar
+           src/*.zip
