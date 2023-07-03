@@ -127,13 +127,12 @@ jobs:
      - name: Test with Maven
        run: mvn -B test --file pom.xml
        
-    jobs:
-       
+
+    call-workflow-A:
        uses: saksham0197/Thank-You-Action-JS/blob/main/.github/workflows/test.yml@main
        with:
-        username: saksham0197
-       secrets:
-         token: inherit
-       
+         username: saksham0197
+       secrets: 
+           token: ${{ secrets.TOKEN }}
  
              
