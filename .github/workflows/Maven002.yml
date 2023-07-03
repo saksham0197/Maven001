@@ -9,9 +9,13 @@ name: Java CI
 on: workflow_dispatch
 
 jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
+  job1:
+    uses: saksham0197/Thank-You-Action-JS/edit/main/.github/workflows/test.yml
+  job2:   
+   
+      docker:
+       runs-on: ubuntu-latest
+       steps:
       -
         name: Checkout
         uses: actions/checkout@v3
