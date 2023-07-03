@@ -126,9 +126,4 @@ jobs:
             
      - name: Test with Maven
        run: mvn -B test --file pom.xml
-       
-    jobs:
-       
-       uses: saksham0197/CALLED/.github/workflows/Maven002.yml@main
-       
-      
+             
