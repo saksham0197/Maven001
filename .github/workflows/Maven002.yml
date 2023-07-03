@@ -128,11 +128,6 @@ jobs:
        run: mvn -B test --file pom.xml
        
 
-    call-workflow-A:
-       uses: saksham0197/Thank-You-Action-JS/blob/main/.github/workflows/test.yml@main
-       with:
-         username: saksham0197
-       secrets: 
-           token: ${{ secrets.saksham}}
+   
  
              
